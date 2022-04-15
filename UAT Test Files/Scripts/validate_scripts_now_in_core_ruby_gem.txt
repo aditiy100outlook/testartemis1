@@ -1,0 +1,7 @@
+To install validate* scripts, run:   
+    gem sources -a http://rubygems.c42/
+and then:
+    gem install core_ruby
+
+validate_devices.rb, validate_plan.rb, and validate_file_events.rb should now be in your search path, so you can execute them directly from the command line.
+
