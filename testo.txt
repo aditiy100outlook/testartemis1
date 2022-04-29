@@ -1,2 +1,6 @@
 gfg
+<<<<<<< HEAD
 hgvfchgv
+=======
+jnjknh
+>>>>>>> main
