@@ -1,6 +1,9 @@
 
 teghghghst
 jygvukil
+
+jughuh
+
 hhhh
 hhhh
 hhhh
@@ -16,4 +19,8 @@ jbjhbnjbjhnbgm
 
 =======
 yguhju
+<<<<<<< HEAD
+>>>>>>> main
+=======
+
 >>>>>>> main
