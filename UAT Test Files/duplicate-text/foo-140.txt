@@ -1,0 +1,616 @@
+# sp testing
+
+## scenarios
+Factors we can manipulate:
+
+* num files, max size of files
+* number of clients
+* online vs. offline w/ catch-up
+* sequential vs. simultaneous clients
+* sequential (and verified) changes vs. continuous edits with events in flight
+
+# setup
+* logging review
+    * touch a file
+    * review debug server logs, legible?
+    * review client logs, legible?
+    * edit the file
+    * review debug server logs, legible?
+    * review client logs, legible?
+* script: retrieve fileId from file path within plan
+* script: retrieve planId from within plan? does the client record it somewhere?
+* is the fileId useful when searching the logs?
+* is the planId useful when searching the logs?
+
+# debugging tools
+* server/client: use planId/fileId to get last few events for a file
+
+# manage test data
+1. files-create.rb [-d num-roots:num-levels:num-per-level] [--blocks random] num-files num-blocks num-bytes
+    * num-files: number of files to create in the current directory
+    * num-blocks: number of data blocks to create within each file
+    * num-bytes: accepts optional size suffixes: b, k, m, g; e.g. 0b, 1k, 10m, 1g
+    * [-d num-roots:num-levels:num-per-level]: create and populate directory trees; each directory contains num-files
+    * [--blocks random]: populate blocks with random data, otherwise use the last byte of the block number, repeated
+1. files-mutate.rb [-a num-bytes] [-p num-bytes] [-i num-bytes] root-directory
+    * -a num-bytes: append
+    * -p num-bytes: prefix
+    * -i num-bytes: insert
+1. directories-collapse.rb
+    * collapse directory tree underneath a single parent folder that holds all children
+1. directories-expand.rb
+    * expand a flat directory structure into a tree
+
+
+sp clients: http://buildmini.c42/SharePlan_OSX/
+sp server: code42@chris-parker-mini.c42 (code42@10.10.45.152)
+    * wired address: 169.254.42.42
+
+~/w/core-tools/bin/validate_plan.rb -H http://10.10.42.50:7380 -u plindqui@code42.com:asdfasdf -p 584981982132972082
+dd if=/dev/random of=~/Desktop/random.data bs=$[1024*1024] count=$[1024*4]
+
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.AbstractFulfillmentTaskCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.transport.CoreTransportService", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.PlanFileEventFulfiller", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.PlanEventCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.sync.SyncServer", level:"DEBUG" ]
+,[ logger:"com.code42.alert", level:"WARN" ]
+,[ logger:"com.code42.core.archive.impl.MountPointCapacityCheck", level:"WARN" ]
+,[ logger:"com.code42.balance.engine", level:"WARN" ]
+,[ logger:"com.code42.core.auth.impl", level:"WARN" ]
+,[ logger:"com.code42.core.auth.AuthTokenReaperCmd", level:"WARN" ]
+
+for i in {0..99}
+do
+#    touch empty0$i.txt
+#    echo "$i" > small0$i.txt
+#    mkdir directory0$i
+done
+dd if=/dev/urandom of=./random.data bs=$[1024] count=$[1024*50]
+
+work to combine boards.. prioritize backlog with tony/brian
+wiki format
+error codes analysis: which are staying? remove some, test remainder
+if an unknown error code is received (rest layer), blow up
+remove rest enums? commands would be exception-based. not sure.
+
+
+## The Laws
+
+Secure, Reliable, Usable, Fast
+
+## Engineering Goals
+* this quarter
+* this year
+
+## Current
+* calendar
+* releases
+* web
+* client applications
+* server -> new page
+    * architecture
+    * design checklist
+    * java style guide
+    * rest api guide
+    * peer review questions
+    * decision log
+
+### Releases
+
+#### 3.6.0
+
+##### REST API
+
+##### Messaging API
+
+##### Features
+
+
+
+#MARKUP markdown
+
++- [SharePlan](SharePlan) > [SharePlan PM Resources](SharePlan_PM_Resources)  -+
+* Starting point => [CrashPlan PROe Security TechSpecs](http://wiki.c42/mediawiki/images/f/f6/TS011302_CrashPlanPROe_TechSpecs_Security.pdf)
+
+
+
+
+
+## java style guide
+### commands
+* generally one INFO log message per user-generated operation
+* hierarchy changes go to the history log
+* api commands (at least) get javadoc'd
+* commands should define their own class attributes (this.orgId, not this.builder.orgId)
+
+## rest style guide
+* malformed rest param? return SC_BAD_REQUEST (400)
+* kicking off an async job? return SC_ACCEPTED (202)
+* ?? do not return not found. stick to the 3 main validations .. https://basecamp.com/1854287/projects/2681778-server-engineering/messages/11319652-public-api-return
+    * rest resources returning not found-- this seems like a security hole. should just fail as unauthorized
+
+API is a platform API, not a CrashPlan or SharePlan APi.
+As an application developer, I want the API to be backwards compatible, so my code continues to function when the server is upgraded.
+As an application developer, I want the API to be forward compatible, so my code functions gracefully on different server versions.
+As an application developer, I want the API versioning scheme to be simple, so I can learn it and use it easily.
+As an application developer, I want the API versioning scheme to be consistent, so it works like other standard schemes do.
+As an application developer, I want all the API resources to be fully documented per version, so I am aware of usage differences.
+As an API developer, I want the API versioning scheme to be easily maintainable, so I continue to version my resources.
+
+
+
+
+!! buy tickets
+
+Double Barrel
+Monkey Brain
+
+
+* frameworks: triggers to have design review
+
+* read-only internal cbo objects
+* invoices from clinics
+
+# sp testing
+
+## scenarios
+Factors we can manipulate:
+
+* num files, max size of files
+* number of clients
+* online vs. offline w/ catch-up
+* sequential vs. simultaneous clients
+* sequential (and verified) changes vs. continuous edits with events in flight
+
+# setup
+* logging review
+    * touch a file
+    * review debug server logs, legible?
+    * review client logs, legible?
+    * edit the file
+    * review debug server logs, legible?
+    * review client logs, legible?
+* script: retrieve fileId from file path within plan
+* script: retrieve planId from within plan? does the client record it somewhere?
+* is the fileId useful when searching the logs?
+* is the planId useful when searching the logs?
+
+# debugging tools
+* server/client: use planId/fileId to get last few events for a file
+
+# manage test data
+1. files-create.rb [-d num-roots:num-levels:num-per-level] [--blocks random] num-files num-blocks num-bytes
+    * num-files: number of files to create in the current directory
+    * num-blocks: number of data blocks to create within each file
+    * num-bytes: accepts optional size suffixes: b, k, m, g; e.g. 0b, 1k, 10m, 1g
+    * [-d num-roots:num-levels:num-per-level]: create and populate directory trees; each directory contains num-files
+    * [--blocks random]: populate blocks with random data, otherwise use the last byte of the block number, repeated
+1. files-mutate.rb [-a num-bytes] [-p num-bytes] [-i num-bytes] root-directory
+    * -a num-bytes: append
+    * -p num-bytes: prefix
+    * -i num-bytes: insert
+1. directories-collapse.rb
+    * collapse directory tree underneath a single parent folder that holds all children
+1. directories-expand.rb
+    * expand a flat directory structure into a tree
+
+
+sp clients: http://buildmini.c42/SharePlan_OSX/
+sp server: code42@chris-parker-mini.c42 (code42@10.10.45.152)
+    * wired address: 169.254.42.42
+
+~/w/core-tools/bin/validate_plan.rb -H http://10.10.42.50:7380 -u plindqui@code42.com:asdfasdf -p 584981982132972082
+dd if=/dev/random of=~/Desktop/random.data bs=$[1024*1024] count=$[1024*4]
+
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.AbstractFulfillmentTaskCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.transport.CoreTransportService", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.PlanFileEventFulfiller", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.PlanEventCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.sync.SyncServer", level:"DEBUG" ]
+,[ logger:"com.code42.alert", level:"WARN" ]
+,[ logger:"com.code42.core.archive.impl.MountPointCapacityCheck", level:"WARN" ]
+,[ logger:"com.code42.balance.engine", level:"WARN" ]
+,[ logger:"com.code42.core.auth.impl", level:"WARN" ]
+,[ logger:"com.code42.core.auth.AuthTokenReaperCmd", level:"WARN" ]
+
+for i in {0..99}
+do
+#    touch empty0$i.txt
+#    echo "$i" > small0$i.txt
+#    mkdir directory0$i
+done
+dd if=/dev/urandom of=./random.data bs=$[1024] count=$[1024*50]
+
+work to combine boards.. prioritize backlog with tony/brian
+wiki format
+error codes analysis: which are staying? remove some, test remainder
+if an unknown error code is received (rest layer), blow up
+remove rest enums? commands would be exception-based. not sure.
+
+
+## The Laws
+
+Secure, Reliable, Usable, Fast
+
+## Engineering Goals
+* this quarter
+* this year
+
+## Current
+* calendar
+* releases
+* web
+* client applications
+* server -> new page
+    * architecture
+    * design checklist
+    * java style guide
+    * rest api guide
+    * peer review questions
+    * decision log
+
+### Releases
+
+#### 3.6.0
+
+##### REST API
+
+##### Messaging API
+
+##### Features
+
+
+
+#MARKUP markdown
+
++- [SharePlan](SharePlan) > [SharePlan PM Resources](SharePlan_PM_Resources)  -+
+* Starting point => [CrashPlan PROe Security TechSpecs](http://wiki.c42/mediawiki/images/f/f6/TS011302_CrashPlanPROe_TechSpecs_Security.pdf)
+
+
+
+
+
+## java style guide
+### commands
+* generally one INFO log message per user-generated operation
+* hierarchy changes go to the history log
+* api commands (at least) get javadoc'd
+* commands should define their own class attributes (this.orgId, not this.builder.orgId)
+
+## rest style guide
+* malformed rest param? return SC_BAD_REQUEST (400)
+* kicking off an async job? return SC_ACCEPTED (202)
+* ?? do not return not found. stick to the 3 main validations .. https://basecamp.com/1854287/projects/2681778-server-engineering/messages/11319652-public-api-return
+    * rest resources returning not found-- this seems like a security hole. should just fail as unauthorized
+
+API is a platform API, not a CrashPlan or SharePlan APi.
+As an application developer, I want the API to be backwards compatible, so my code continues to function when the server is upgraded.
+As an application developer, I want the API to be forward compatible, so my code functions gracefully on different server versions.
+As an application developer, I want the API versioning scheme to be simple, so I can learn it and use it easily.
+As an application developer, I want the API versioning scheme to be consistent, so it works like other standard schemes do.
+As an application developer, I want all the API resources to be fully documented per version, so I am aware of usage differences.
+As an API developer, I want the API versioning scheme to be easily maintainable, so I continue to version my resources.
+
+
+
+
+!! buy tickets
+
+Double Barrel
+Monkey Brain
+
+
+* frameworks: triggers to have design review
+
+* read-only internal cbo objects
+* invoices from clinics
+
+# sp testing
+
+## scenarios
+Factors we can manipulate:
+
+* num files, max size of files
+* number of clients
+* online vs. offline w/ catch-up
+* sequential vs. simultaneous clients
+* sequential (and verified) changes vs. continuous edits with events in flight
+
+# setup
+* logging review
+    * touch a file
+    * review debug server logs, legible?
+    * review client logs, legible?
+    * edit the file
+    * review debug server logs, legible?
+    * review client logs, legible?
+* script: retrieve fileId from file path within plan
+* script: retrieve planId from within plan? does the client record it somewhere?
+* is the fileId useful when searching the logs?
+* is the planId useful when searching the logs?
+
+# debugging tools
+* server/client: use planId/fileId to get last few events for a file
+
+# manage test data
+1. files-create.rb [-d num-roots:num-levels:num-per-level] [--blocks random] num-files num-blocks num-bytes
+    * num-files: number of files to create in the current directory
+    * num-blocks: number of data blocks to create within each file
+    * num-bytes: accepts optional size suffixes: b, k, m, g; e.g. 0b, 1k, 10m, 1g
+    * [-d num-roots:num-levels:num-per-level]: create and populate directory trees; each directory contains num-files
+    * [--blocks random]: populate blocks with random data, otherwise use the last byte of the block number, repeated
+1. files-mutate.rb [-a num-bytes] [-p num-bytes] [-i num-bytes] root-directory
+    * -a num-bytes: append
+    * -p num-bytes: prefix
+    * -i num-bytes: insert
+1. directories-collapse.rb
+    * collapse directory tree underneath a single parent folder that holds all children
+1. directories-expand.rb
+    * expand a flat directory structure into a tree
+
+
+sp clients: http://buildmini.c42/SharePlan_OSX/
+sp server: code42@chris-parker-mini.c42 (code42@10.10.45.152)
+    * wired address: 169.254.42.42
+
+~/w/core-tools/bin/validate_plan.rb -H http://10.10.42.50:7380 -u plindqui@code42.com:asdfasdf -p 584981982132972082
+dd if=/dev/random of=~/Desktop/random.data bs=$[1024*1024] count=$[1024*4]
+
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.AbstractFulfillmentTaskCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.transport.CoreTransportService", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.PlanFileEventFulfiller", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.PlanEventCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.sync.SyncServer", level:"DEBUG" ]
+,[ logger:"com.code42.alert", level:"WARN" ]
+,[ logger:"com.code42.core.archive.impl.MountPointCapacityCheck", level:"WARN" ]
+,[ logger:"com.code42.balance.engine", level:"WARN" ]
+,[ logger:"com.code42.core.auth.impl", level:"WARN" ]
+,[ logger:"com.code42.core.auth.AuthTokenReaperCmd", level:"WARN" ]
+
+for i in {0..99}
+do
+#    touch empty0$i.txt
+#    echo "$i" > small0$i.txt
+#    mkdir directory0$i
+done
+dd if=/dev/urandom of=./random.data bs=$[1024] count=$[1024*50]
+
+work to combine boards.. prioritize backlog with tony/brian
+wiki format
+error codes analysis: which are staying? remove some, test remainder
+if an unknown error code is received (rest layer), blow up
+remove rest enums? commands would be exception-based. not sure.
+
+
+## The Laws
+
+Secure, Reliable, Usable, Fast
+
+## Engineering Goals
+* this quarter
+* this year
+
+## Current
+* calendar
+* releases
+* web
+* client applications
+* server -> new page
+    * architecture
+    * design checklist
+    * java style guide
+    * rest api guide
+    * peer review questions
+    * decision log
+
+### Releases
+
+#### 3.6.0
+
+##### REST API
+
+##### Messaging API
+
+##### Features
+
+
+
+#MARKUP markdown
+
++- [SharePlan](SharePlan) > [SharePlan PM Resources](SharePlan_PM_Resources)  -+
+* Starting point => [CrashPlan PROe Security TechSpecs](http://wiki.c42/mediawiki/images/f/f6/TS011302_CrashPlanPROe_TechSpecs_Security.pdf)
+
+
+
+
+
+## java style guide
+### commands
+* generally one INFO log message per user-generated operation
+* hierarchy changes go to the history log
+* api commands (at least) get javadoc'd
+* commands should define their own class attributes (this.orgId, not this.builder.orgId)
+
+## rest style guide
+* malformed rest param? return SC_BAD_REQUEST (400)
+* kicking off an async job? return SC_ACCEPTED (202)
+* ?? do not return not found. stick to the 3 main validations .. https://basecamp.com/1854287/projects/2681778-server-engineering/messages/11319652-public-api-return
+    * rest resources returning not found-- this seems like a security hole. should just fail as unauthorized
+
+API is a platform API, not a CrashPlan or SharePlan APi.
+As an application developer, I want the API to be backwards compatible, so my code continues to function when the server is upgraded.
+As an application developer, I want the API to be forward compatible, so my code functions gracefully on different server versions.
+As an application developer, I want the API versioning scheme to be simple, so I can learn it and use it easily.
+As an application developer, I want the API versioning scheme to be consistent, so it works like other standard schemes do.
+As an application developer, I want all the API resources to be fully documented per version, so I am aware of usage differences.
+As an API developer, I want the API versioning scheme to be easily maintainable, so I continue to version my resources.
+
+
+
+
+!! buy tickets
+
+Double Barrel
+Monkey Brain
+
+
+* frameworks: triggers to have design review
+
+* read-only internal cbo objects
+* invoices from clinics
+
+# sp testing
+
+## scenarios
+Factors we can manipulate:
+
+* num files, max size of files
+* number of clients
+* online vs. offline w/ catch-up
+* sequential vs. simultaneous clients
+* sequential (and verified) changes vs. continuous edits with events in flight
+
+# setup
+* logging review
+    * touch a file
+    * review debug server logs, legible?
+    * review client logs, legible?
+    * edit the file
+    * review debug server logs, legible?
+    * review client logs, legible?
+* script: retrieve fileId from file path within plan
+* script: retrieve planId from within plan? does the client record it somewhere?
+* is the fileId useful when searching the logs?
+* is the planId useful when searching the logs?
+
+# debugging tools
+* server/client: use planId/fileId to get last few events for a file
+
+# manage test data
+1. files-create.rb [-d num-roots:num-levels:num-per-level] [--blocks random] num-files num-blocks num-bytes
+    * num-files: number of files to create in the current directory
+    * num-blocks: number of data blocks to create within each file
+    * num-bytes: accepts optional size suffixes: b, k, m, g; e.g. 0b, 1k, 10m, 1g
+    * [-d num-roots:num-levels:num-per-level]: create and populate directory trees; each directory contains num-files
+    * [--blocks random]: populate blocks with random data, otherwise use the last byte of the block number, repeated
+1. files-mutate.rb [-a num-bytes] [-p num-bytes] [-i num-bytes] root-directory
+    * -a num-bytes: append
+    * -p num-bytes: prefix
+    * -i num-bytes: insert
+1. directories-collapse.rb
+    * collapse directory tree underneath a single parent folder that holds all children
+1. directories-expand.rb
+    * expand a flat directory structure into a tree
+
+
+sp clients: http://buildmini.c42/SharePlan_OSX/
+sp server: code42@chris-parker-mini.c42 (code42@10.10.45.152)
+    * wired address: 169.254.42.42
+
+~/w/core-tools/bin/validate_plan.rb -H http://10.10.42.50:7380 -u plindqui@code42.com:asdfasdf -p 584981982132972082
+dd if=/dev/random of=~/Desktop/random.data bs=$[1024*1024] count=$[1024*4]
+
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.AbstractFulfillmentTaskCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.transport.CoreTransportService", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.fulfillment.PlanFileEventFulfiller", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.coordination.PlanEventCoordinator", level:"DEBUG" ]
+,[ logger:"com.code42.shareplan.planevent.sync.SyncServer", level:"DEBUG" ]
+,[ logger:"com.code42.alert", level:"WARN" ]
+,[ logger:"com.code42.core.archive.impl.MountPointCapacityCheck", level:"WARN" ]
+,[ logger:"com.code42.balance.engine", level:"WARN" ]
+,[ logger:"com.code42.core.auth.impl", level:"WARN" ]
+,[ logger:"com.code42.core.auth.AuthTokenReaperCmd", level:"WARN" ]
+
+for i in {0..99}
+do
+#    touch empty0$i.txt
+#    echo "$i" > small0$i.txt
+#    mkdir directory0$i
+done
+dd if=/dev/urandom of=./random.data bs=$[1024] count=$[1024*50]
+
+work to combine boards.. prioritize backlog with tony/brian
+wiki format
+error codes analysis: which are staying? remove some, test remainder
+if an unknown error code is received (rest layer), blow up
+remove rest enums? commands would be exception-based. not sure.
+
+
+## The Laws
+
+Secure, Reliable, Usable, Fast
+
+## Engineering Goals
+* this quarter
+* this year
+
+## Current
+* calendar
+* releases
+* web
+* client applications
+* server -> new page
+    * architecture
+    * design checklist
+    * java style guide
+    * rest api guide
+    * peer review questions
+    * decision log
+
+### Releases
+
+#### 3.6.0
+
+##### REST API
+
+##### Messaging API
+
+##### Features
+
+
+
+#MARKUP markdown
+
++- [SharePlan](SharePlan) > [SharePlan PM Resources](SharePlan_PM_Resources)  -+
+* Starting point => [CrashPlan PROe Security TechSpecs](http://wiki.c42/mediawiki/images/f/f6/TS011302_CrashPlanPROe_TechSpecs_Security.pdf)
+
+
+
+
+
+## java style guide
+### commands
+* generally one INFO log message per user-generated operation
+* hierarchy changes go to the history log
+* api commands (at least) get javadoc'd
+* commands should define their own class attributes (this.orgId, not this.builder.orgId)
+
+## rest style guide
+* malformed rest param? return SC_BAD_REQUEST (400)
+* kicking off an async job? return SC_ACCEPTED (202)
+* ?? do not return not found. stick to the 3 main validations .. https://basecamp.com/1854287/projects/2681778-server-engineering/messages/11319652-public-api-return
+    * rest resources returning not found-- this seems like a security hole. should just fail as unauthorized
+
+API is a platform API, not a CrashPlan or SharePlan APi.
+As an application developer, I want the API to be backwards compatible, so my code continues to function when the server is upgraded.
+As an application developer, I want the API to be forward compatible, so my code functions gracefully on different server versions.
+As an application developer, I want the API versioning scheme to be simple, so I can learn it and use it easily.
+As an application developer, I want the API versioning scheme to be consistent, so it works like other standard schemes do.
+As an application developer, I want all the API resources to be fully documented per version, so I am aware of usage differences.
+As an API developer, I want the API versioning scheme to be easily maintainable, so I continue to version my resources.
+
+
+
+
+!! buy tickets
+
+Double Barrel
+Monkey Brain
+
+
+* frameworks: triggers to have design review
+
+* read-only internal cbo objects
+* invoices from clinics
+
